@@ -10,13 +10,12 @@ const { name, url, isBig = false } = Astro.props;
 const pokemonId = url.split("/")[url.split("/").length - 2];
 ---
 
+<!-- href=`/pokemon/${pokemonId}` -->
 <a
     href=`/pokemons/${name}`
     class:list={[
-        `bg-gradient-to-tr from-pink-300 to-purple-400 p-4 rounded-lg hover:scale-110 transition-all ease-in-out duration-300 cursor-pointer shadow-md shadow-purple-400`,
-        {
-            border: isBig,
-        },
+        ` p-4 rounded-lg hover:scale-110 transition-all ease-in-out duration-300 cursor-pointer shadow-md bg-gradient-to-tr from-pink-300 to-purple-400`,
+        {},
     ]}
 >
     <img
@@ -31,16 +30,18 @@ const pokemonId = url.split("/")[url.split("/").length - 2];
         ]}
     />
 
-    <span
-        class:list={[
-            ` font-bold text-center capitalize"`,
-            {
-                "text-2xl": isBig,
-                "text-xl": !isBig,
-            },
-        ]}
-    >
-        # {pokemonId}
-        {name}
-    </span>
+    <div class="flex justify-center">
+        <span
+            class:list={[
+                ` font-bold text-center capitalize text-blue-600`,
+                {
+                    "text-2xl": isBig,
+                    "text-xl": !isBig,
+                },
+            ]}
+        >
+            # {pokemonId}
+            {name}
+        </span>
+    </div>
 </a>
