@@ -1,0 +1,46 @@
+---
+interface Props {
+    name: string;
+    url: string;
+    isBig?: boolean;
+}
+
+const { name, url, isBig = false } = Astro.props;
+
+const pokemonId = url.split("/")[url.split("/").length - 2];
+---
+
+<a
+    href=`/pokemons/${name}`
+    class:list={[
+        `bg-gradient-to-tr from-pink-300 to-purple-400 p-4 rounded-lg hover:scale-110 transition-all ease-in-out duration-300 cursor-pointer shadow-md shadow-purple-400`,
+        {
+            border: isBig,
+        },
+    ]}
+>
+    <img
+        transition:name={`${name}-image`}
+        src=`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonId}.png`
+        alt={pokemonId}
+        class:list={[
+            {
+                "w-26 h-26": isBig,
+                "w-22 h-22": !isBig,
+            },
+        ]}
+    />
+
+    <span
+        class:list={[
+            ` font-bold text-center capitalize"`,
+            {
+                "text-2xl": isBig,
+                "text-xl": !isBig,
+            },
+        ]}
+    >
+        # {pokemonId}
+        {name}
+    </span>
+</a>

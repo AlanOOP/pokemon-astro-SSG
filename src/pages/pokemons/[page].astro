@@ -1,0 +1,76 @@
+---
+import type { GetStaticPaths } from "astro";
+
+import MainLayout from "../../layouts/MainLayout.astro";
+import type { PokemonListResponse } from "../../interfaces/pokemon-list.reponse";
+import PokemonCard from "../../components/pokemon/PokemonCard.astro";
+
+const title = "Pokémon Static";
+
+export const getStaticPaths = (async ({ paginate }) => {
+    const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
+    const data = (await response.json()) as PokemonListResponse;
+
+    return paginate(data.results, { pageSize: 10 });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+---
+
+<MainLayout title={title}>
+    <h1 class="text-3xl">Listado Pokémon</h1>
+    <hr />
+
+    <section
+        aria-label="Listado de Pokémons"
+        class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-4 mt-10"
+    >
+        {
+            page.data.map((pokemon) => (
+                <PokemonCard name={pokemon.name} url={pokemon.url} isBig />
+            ))
+        }
+    </section>
+
+    <section class="flex px-10 mt-10 items-center gap-2">
+        <!-- {
+            page.url.prev && (
+                <a class="btn" href={page.url.prev}>
+                    Anteriores
+                </a>
+            )
+        } -->
+        <a
+            class:list={[
+                "btn",
+                {
+                    disabled: !page.url.prev,
+                },
+            ]}
+            href={page.url.prev}
+        >
+            Anteriores
+        </a>
+        <a
+            class:list={[
+                "btn",
+                {
+                    disable: !page.url.next,
+                },
+            ]}
+            href={page.url.next}>Siguiente</a
+        >
+        <div class="flex flex-1"></div>
+        <span class="text-xl font-bold"> Página: {page.currentPage}</span>
+    </section>
+</MainLayout>
+
+<style>
+    .btn {
+        @apply bg-blue-500 text-white px-4 py-2 rounded-sm;
+    }
+
+    .disable {
+        @apply bg-gray-300 text-gray-500 cursor-not-allowed;
+    }
+</style>
